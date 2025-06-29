@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getClientById } from '../services/get-client';
+import { updateInvoiceStatus } from '../services/update-invoice-status';
 import { getClientInvoices, type Invoice } from '../services/get-client-invoices';
-import BackButton from '../components/BackButton';
 import ErrorBadge from '../components/ErrorBadge';
+import BackButton from '../components/BackButton';
 import Pagination from '../components/Pagination';
 
 const ViewClient: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!id) navigate('/clients');
+  }, [id, navigate]);
+
   const [invoicePage, setInvoicePage] = useState(1);
   const invoicePageSize = 2;
 
+  const queryClient = useQueryClient();
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Client details
   const { data: clientData, isLoading: loadingClient, isError: errorClient } = useQuery({
     queryKey: ['client', id],
     queryFn: () => getClientById(id!),
@@ -19,6 +30,7 @@ const ViewClient: React.FC = () => {
     staleTime: 1000 * 60 * 5,
   });
 
+  // Cliente invoices
   const { data: invoicesData, isLoading: loadingInvoices, isError: errorInvoices } = useQuery({
     queryKey: ['client-invoices', id, invoicePage],
     queryFn: () => getClientInvoices(id!, invoicePage, invoicePageSize),
@@ -26,14 +38,24 @@ const ViewClient: React.FC = () => {
     staleTime: 1000 * 60 * 5,
   });
 
+  // Mutation to update invoice status
+  const mutation = useMutation({
+    mutationFn: ({ invoice_id, currentStatus }: { invoice_id: string; currentStatus: string }) =>
+      updateInvoiceStatus(invoice_id, currentStatus === 'paid' ? 'open' : 'paid'),
+    onSuccess: () => {
+      setSuccessMessage('Status da fatura atualizado com sucesso!');
+      if (id) queryClient.invalidateQueries({ queryKey: ['client-invoices', id] });
+      setTimeout(() => setSuccessMessage(null), 3000);
+    },
+    onError: () => {
+      setSuccessMessage('Erro ao atualizar status da fatura.');
+      setTimeout(() => setSuccessMessage(null), 3000);
+    },
+  });
+
   const client = clientData?.data;
   const invoices: Invoice[] = invoicesData?.data?.data || [];
   const totalPages = invoicesData?.data?.total_pages || 1;
-
-  function formatMonthYear(dateString: string) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-  }
 
   return (
     <div
@@ -52,40 +74,18 @@ const ViewClient: React.FC = () => {
       {errorClient && <ErrorBadge message="Erro ao carregar cliente." />}
       {loadingClient && <p>Carregando cliente...</p>}
 
-      {/* Container para alinhar largura dos dois blocos */}
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        {/* Dados do cliente */}
         {!loadingClient && !errorClient && client && (
-          <div
-            style={{
-              marginBottom: '1.5rem',
-              padding: '1.5rem',
-              backgroundColor: 'white',
-              borderRadius: 12,
-              boxShadow: '0 0 12px rgb(0 0 0 / 0.05)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <h2 style={{ fontWeight: 600, fontSize: '2rem', marginBottom: 16 }}>
-              {client.name}
-            </h2>
-            <div
-              style={{
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'space-around',
-                flexWrap: 'wrap',
-                gap: '1.5rem',
-              }}
-            >
-              <div style={{ minWidth: 220 }}>
+          <div className="mb-4 p-4 bg-white rounded shadow-sm">
+            <h2 className="text-center mb-4">{client.name}</h2>
+
+            <div className="d-flex justify-content-between flex-wrap">
+              <div style={{ minWidth: 250, marginBottom: 12 }}>
                 <p><strong>Telefone:</strong> {client.phone}</p>
                 <p><strong>CPF:</strong> {client.cpf}</p>
                 <p><strong>Data de Nascimento:</strong> {new Date(client.birth_date).toLocaleDateString('pt-BR')}</p>
               </div>
-              <div style={{ minWidth: 220 }}>
+              <div style={{ minWidth: 250, marginBottom: 12 }}>
                 <p><strong>Valor da Mensalidade Atual:</strong> R$ {client.current_invoice_price.toFixed(2)}</p>
                 <p><strong>Criado em:</strong> {new Date(client.created_at).toLocaleDateString('pt-BR')}</p>
               </div>
@@ -93,26 +93,18 @@ const ViewClient: React.FC = () => {
           </div>
         )}
 
-        {/* Título das faturas */}
-        <h3 style={{ textAlign: 'center', marginBottom: '1rem' }}>Faturas do Cliente</h3>
+        <h2 className="mb-3 text-center">Faturas do Cliente</h2>
 
-        {/* Container das faturas */}
-        <div
-          style={{
-            position: 'relative',
-            border: '1px solid #ddd',
-            padding: '1rem',
-            backgroundColor: 'white',
-            borderRadius: 12,
-          }}
-        >
-          <div style={{ position: 'absolute', top: 8, right: 8 }}>
-            <Pagination
-              currentPage={invoicePage}
-              totalPages={totalPages}
-              onPageChange={setInvoicePage}
-            />
-          </div>
+        <div className="d-flex justify-content-end mb-3">
+          <Pagination
+            currentPage={invoicePage}
+            totalPages={totalPages}
+            onPageChange={setInvoicePage}
+          />
+        </div>
+
+        <div className="border p-3 bg-white rounded">
+          {successMessage && <ErrorBadge message={successMessage} />}
 
           {loadingInvoices && <p>Carregando faturas...</p>}
           {errorInvoices && <ErrorBadge message="Erro ao carregar faturas." />}
@@ -122,78 +114,49 @@ const ViewClient: React.FC = () => {
           )}
 
           {!loadingInvoices && invoices.length > 0 && (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
-                marginTop: '2rem',
-              }}
-            >
-              {invoices.map((invoice) => (
-                <div
-                  key={invoice.id}
-                  style={{
-                    border: '1.5px solid',
-                    borderColor: invoice.status === 'paid' ? '#28a745' : '#dc3545',
-                    borderRadius: 10,
-                    padding: '1rem 1.5rem',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: invoice.status === 'paid' ? '#d4edda' : '#f8d7da',
-                    color: invoice.status === 'paid' ? '#155724' : '#721c24',
-                  }}
-                >
+            <div className="d-flex flex-column gap-3">
+              {invoices.map((invoice) => {
+                const isPaid = invoice.status === 'paid';
+
+                return (
                   <div
-                    style={{
-                      display: 'flex',
-                      flex: 1,
-                      justifyContent: 'space-between',
-                      gap: '2rem',
-                      minWidth: 0,
-                      flexWrap: 'wrap',
-                    }}
+                    key={invoice.id}
+                    className="d-flex justify-content-between align-items-center p-3 border rounded shadow-sm"
+                    style={{ backgroundColor: '#f9f9f9' }}
                   >
                     <div>
-                      <strong>Mês:</strong> {formatMonthYear(invoice.created_at)}
+                      <p
+                        className="mb-1 fw-bold"
+                        style={{ fontSize: '1.1rem', textTransform: 'capitalize' }}
+                      >
+                        {new Date(invoice.created_at).toLocaleString('pt-BR', {
+                          month: 'long',
+                          year: 'numeric',
+                        })}
+                      </p>
+                      <span
+                        className={`badge ${isPaid ? 'bg-success' : 'bg-warning text-dark'}`}
+                        style={{ fontSize: '0.9rem' }}
+                      >
+                        {isPaid ? 'Pago' : 'Aberto'}
+                      </span>
+                      <p className="mt-1 mb-0" style={{ fontWeight: 600 }}>
+                        Valor: R$ {invoice.value.toFixed(2)}
+                      </p>
                     </div>
-                    <div>
-                      <strong>Status:</strong>{' '}
-                      {invoice.status === 'paid' ? (
-                        <span style={{ fontWeight: 'bold', color: '#155724' }}>Pago</span>
-                      ) : (
-                        <span style={{ fontWeight: 'bold', color: '#721c24' }}>Aberto</span>
-                      )}
-                    </div>
-                    <div>
-                      <strong>Valor:</strong> R$ {invoice.value.toFixed(2)}
-                    </div>
-                    <div>
-                      <strong>Criado em:</strong>{' '}
-                      {new Date(invoice.created_at).toLocaleDateString('pt-BR')}
-                    </div>
-                  </div>
 
-                  <div style={{ display: 'flex', gap: '0.75rem', marginLeft: '1rem' }}>
-                    {invoice.status === 'open' ? (
-                      <button
-                        className="btn btn-success btn-sm"
-                        onClick={() => console.log('Marcar como pago:', invoice.id)}
-                      >
-                        Pagar fatura
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-warning btn-sm"
-                        onClick={() => console.log('Marcar como pendente:', invoice.id)}
-                      >
-                        Reabrir fatura
-                      </button>
-                    )}
+                    <button
+                      className={`btn btn-sm ${isPaid ? 'btn-warning' : 'btn-success'}`}
+                      onClick={() =>
+                        mutation.mutate({ invoice_id: invoice.id, currentStatus: invoice.status })
+                      }
+                      disabled={mutation.isPending}
+                    >
+                      {isPaid ? 'Reabrir Fatura' : 'Pagar fatura'}
+                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
