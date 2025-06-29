@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BackButton from '../components/BackButton';
 import { listClients, type Client } from '../services/list-clients';
 import SearchInput from '../components/SearchInput';
+import Pagination from '../components/Pagination';
 
 const Clients: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -72,45 +73,13 @@ const Clients: React.FC = () => {
 
         <div className="position-relative border p-3 bg-white rounded">
           <div className="position-absolute top-0 end-0 m-2">
-            <nav>
-              <ul className="pagination pagination-sm mb-0">
-                <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
-                  <button
-                    className="page-link"
-                    onClick={() => setPage(Math.max(page - 1, 1))}
-                  >
-                    Anterior
-                  </button>
-                </li>
-
-                {/* Pagination */}
-                {(() => {
-                  const pages = [];
-                  const startPage = Math.max(1, page - 3);
-                  const endPage = Math.min(totalPages, page + 3);
-                  for (let i = startPage; i <= endPage; i++) {
-                    pages.push(
-                      <li key={i} className={`page-item ${page === i ? 'active' : ''}`}>
-                        <button className="page-link" onClick={() => setPage(i)}>
-                          {i}
-                        </button>
-                      </li>
-                    );
-                  }
-                  return pages;
-                })()}
-
-                <li className={`page-item ${page === totalPages ? 'disabled' : ''}`}>
-                  <button
-                    className="page-link"
-                    onClick={() => setPage(Math.min(page + 1, totalPages))}
-                  >
-                    Próximo
-                  </button>
-                </li>
-              </ul>
-            </nav>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
           </div>
+
 
           <div style={{ marginTop: '2rem' }}>
             {loading && <p>Carregando clientes...</p>}
