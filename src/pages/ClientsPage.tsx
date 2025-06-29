@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import BackButton from '../components/BackButton';
 import SearchInput from '../components/SearchInput';
 import Pagination from '../components/Pagination';
 import ClientCard from '../components/ClientCard';
 import ErrorBadge from '../components/ErrorBadge';
-import { listClients, type Client } from '../services/list-clients';
+import { listClients } from '../services/list-clients';
 import { useDebounce } from '../hooks/Debounce';
+import type { Client } from '../services/interfaces';
+import { useLocation } from 'react-router-dom';
+import SuccessBadge from '../components/SuccessBadge';
 
 const pageSize = 2;
 
@@ -14,6 +17,17 @@ const Clients: React.FC = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const updateSuccess = params.get('updated') === 'true';
+
+  useEffect(() => {
+  if (updateSuccess) {
+    const cleanUrl = location.pathname;
+    window.history.replaceState({}, '', cleanUrl);
+  }
+}, [updateSuccess, location.pathname]);
 
   const {
     data,
@@ -34,6 +48,7 @@ const Clients: React.FC = () => {
   const totalPages = data?.data?.total_pages || 1;
 
   return (
+    
     <div
       style={{
         minHeight: '100vh',
@@ -43,6 +58,8 @@ const Clients: React.FC = () => {
         boxSizing: 'border-box',
       }}
     >
+
+      {updateSuccess && <SuccessBadge message={'Dados do cliente Atualizados!'} />}
       <div className="mb-3">
         <BackButton />
       </div>
@@ -86,7 +103,6 @@ const Clients: React.FC = () => {
                   <ClientCard
                     key={client.id}
                     client={client}
-                    onEdit={(id) => console.log('Atualizar', id)}
                     onDelete={(id) => console.log('Deletar', id)}
                   />
                 ))}

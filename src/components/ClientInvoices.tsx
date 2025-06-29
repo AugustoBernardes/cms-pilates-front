@@ -2,7 +2,7 @@ import React from 'react';
 import Pagination from './Pagination';
 import SuccessBadge from './SuccessBadge';
 import ErrorBadge from './ErrorBadge';
-import type { Client } from '../services/list-clients';
+import type { Client } from '../services/interfaces';
 
 export type Invoice = {
   id: string;

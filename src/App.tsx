@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/HomePage';
 import Clients from './pages/ClientsPage';
 import ViewClient from './pages/ViewClientPage';
+import EditClientPage from './pages/EditClientPage';
 
 const App: React.FC = () => {
 
@@ -31,6 +32,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/clients/:id/edit" element={<EditClientPage />} />
         <Route path="/clients/:id" element={<ViewClient />} />
       </Routes>
     </BrowserRouter>
