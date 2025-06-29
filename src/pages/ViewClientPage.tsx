@@ -6,8 +6,8 @@ import { updateInvoiceStatus } from '../services/update-invoice-status';
 import { getClientInvoices, type Invoice } from '../services/get-client-invoices';
 import ErrorBadge from '../components/ErrorBadge';
 import BackButton from '../components/BackButton';
-import Pagination from '../components/Pagination';
-import SuccessBadge from '../components/SuccessBadge';
+import ClientDetails from '../components/ClientDetailsCard';
+import ClientInvoices from '../components/ClientInvoices';
 
 const ViewClient: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +31,7 @@ const ViewClient: React.FC = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  // Cliente invoices
+  // Clients invoices
   const { data: invoicesData, isLoading: loadingInvoices, isError: errorInvoices } = useQuery({
     queryKey: ['client-invoices', id, invoicePage],
     queryFn: () => getClientInvoices(id!, invoicePage, invoicePageSize),
@@ -77,90 +77,25 @@ const ViewClient: React.FC = () => {
 
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         {!loadingClient && !errorClient && client && (
-          <div className="mb-4 p-4 bg-white rounded shadow-sm">
-            <h2 className="text-center mb-4">{client.name}</h2>
-
-            <div className="d-flex justify-content-between flex-wrap">
-              <div style={{ minWidth: 250, marginBottom: 12 }}>
-                <p><strong>Telefone:</strong> {client.phone}</p>
-                <p><strong>CPF:</strong> {client.cpf}</p>
-                <p><strong>Data de Nascimento:</strong> {new Date(client.birth_date).toLocaleDateString('pt-BR')}</p>
-              </div>
-              <div style={{ minWidth: 250, marginBottom: 12 }}>
-                <p><strong>Valor da Mensalidade Atual:</strong> R$ {client.current_invoice_price.toFixed(2)}</p>
-                <p><strong>Criado em:</strong> {new Date(client.created_at).toLocaleDateString('pt-BR')}</p>
-              </div>
-            </div>
-          </div>
+          <ClientDetails client={client} />
         )}
 
         <h2 className="mb-3 text-center">Faturas do Cliente</h2>
 
-        <div className="d-flex justify-content-end mb-3">
-          <Pagination
-            currentPage={invoicePage}
-            totalPages={totalPages}
-            onPageChange={setInvoicePage}
-          />
-        </div>
+        <ClientInvoices
+          invoices={invoices}
+          totalPages={totalPages}
+          currentPage={invoicePage}
+          onPageChange={setInvoicePage}
+          onToggleStatus={(invoice_id, currentStatus) =>
+            mutation.mutate({ invoice_id, currentStatus })
+          }
+          isLoading={loadingInvoices}
+          isError={errorInvoices}
+          successMessage={successMessage}
+          isMutationPending={mutation.isPending}
+        />
 
-        <div className="border p-3 bg-white rounded">
-          {successMessage && <SuccessBadge message={successMessage} />}
-
-          {loadingInvoices && <p>Carregando faturas...</p>}
-          {errorInvoices && <ErrorBadge message="Erro ao carregar faturas." />}
-
-          {!loadingInvoices && invoices.length === 0 && (
-            <p className="text-muted">Nenhuma fatura encontrada.</p>
-          )}
-
-          {!loadingInvoices && invoices.length > 0 && (
-            <div className="d-flex flex-column gap-3">
-              {invoices.map((invoice) => {
-                const isPaid = invoice.status === 'paid';
-
-                return (
-                  <div
-                    key={invoice.id}
-                    className="d-flex justify-content-between align-items-center p-3 border rounded shadow-sm"
-                    style={{ backgroundColor: '#f9f9f9' }}
-                  >
-                    <div>
-                      <p
-                        className="mb-1 fw-bold"
-                        style={{ fontSize: '1.1rem', textTransform: 'capitalize' }}
-                      >
-                        {new Date(invoice.created_at).toLocaleString('pt-BR', {
-                          month: 'long',
-                          year: 'numeric',
-                        })}
-                      </p>
-                      <span
-                        className={`badge ${isPaid ? 'bg-success' : 'bg-warning text-dark'}`}
-                        style={{ fontSize: '0.9rem' }}
-                      >
-                        {isPaid ? 'Pago' : 'Aberto'}
-                      </span>
-                      <p className="mt-1 mb-0" style={{ fontWeight: 600 }}>
-                        Valor: R$ {invoice.value.toFixed(2)}
-                      </p>
-                    </div>
-
-                    <button
-                      className={`btn btn-sm ${isPaid ? 'btn-warning' : 'btn-success'}`}
-                      onClick={() =>
-                        mutation.mutate({ invoice_id: invoice.id, currentStatus: invoice.status })
-                      }
-                      disabled={mutation.isPending}
-                    >
-                      {isPaid ? 'Reabrir Fatura' : 'Pagar fatura'}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

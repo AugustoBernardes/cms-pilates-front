@@ -1,6 +1,10 @@
 import api from "./api";
 import type { BaseResponse } from "./interfaces";
 
+export interface Month {
+  id: string;
+  month: string;
+}
 export interface Invoice {
   id: string;
   status: string;
@@ -8,6 +12,7 @@ export interface Invoice {
   client_id: string;
   month_id: string;
   created_at: string;
+  month: Month;
 }
 
 export interface ListClientInvoicesResponse {
