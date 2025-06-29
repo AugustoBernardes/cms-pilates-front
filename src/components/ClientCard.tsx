@@ -1,15 +1,17 @@
 // src/components/ClientCard.tsx
 import React from 'react';
 import type { Client } from '../services/list-clients';
+import { useNavigate } from 'react-router-dom';
 
 interface ClientCardProps {
   client: Client;
-  onView: (id: string) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
-const ClientCard: React.FC<ClientCardProps> = ({ client, onView, onEdit, onDelete }) => {
+const ClientCard: React.FC<ClientCardProps> = ({ client, onEdit, onDelete }) => {
+  const navigate = useNavigate();
+  
   return (
     <div className="card mb-3">
       <div className="card-body d-flex justify-content-between align-items-center">
@@ -24,7 +26,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, onView, onEdit, onDelet
         <div className="d-flex flex-column gap-2">
           <button
             className="btn btn-outline-primary btn-sm"
-            onClick={() => onView(client.id)}
+            onClick={() => navigate(`/clients/${client.id}`)}
           >
             Visualizar
           </button>

@@ -4,6 +4,7 @@ import Login from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/HomePage';
 import Clients from './pages/ClientsPage';
+import ViewClient from './pages/ViewClientPage';
 
 const App: React.FC = () => {
 
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/clients/:id" element={<ViewClient />} />
       </Routes>
     </BrowserRouter>
   );

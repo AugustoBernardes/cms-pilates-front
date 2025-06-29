@@ -86,7 +86,6 @@ const Clients: React.FC = () => {
                   <ClientCard
                     key={client.id}
                     client={client}
-                    onView={(id) => console.log('Visualizar', id)}
                     onEdit={(id) => console.log('Atualizar', id)}
                     onDelete={(id) => console.log('Deletar', id)}
                   />
