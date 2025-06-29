@@ -4,6 +4,7 @@ import { listClients, type Client } from '../services/list-clients';
 import SearchInput from '../components/SearchInput';
 import Pagination from '../components/Pagination';
 import ClientCard from '../components/ClientCard';
+import ErrorBadge from '../components/ErrorBadge';
 
 const Clients: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -59,6 +60,8 @@ const Clients: React.FC = () => {
         <BackButton />
       </div>
 
+      {error && <ErrorBadge message={error} />}
+
 
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <SearchInput
@@ -82,7 +85,15 @@ const Clients: React.FC = () => {
           </div>
 
 
-          <div style={{ marginTop: '2rem' }}>
+         <div style={{ marginTop: '2rem' }}>
+            {loading && <p>Carregando clientes...</p>}
+
+            {error && <p className="text-danger">{error}</p>}
+
+            {!loading && !error && clients.length === 0 && (
+              <p className="text-muted">Nenhum cliente encontrado.</p>
+            )}
+
             {!loading && !error && clients.length > 0 && (
               <div>
                 {clients.map((client) => (
@@ -96,7 +107,6 @@ const Clients: React.FC = () => {
                 ))}
               </div>
             )}
-
           </div>
         </div>
       </div>
