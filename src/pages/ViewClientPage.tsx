@@ -7,6 +7,7 @@ import { getClientInvoices, type Invoice } from '../services/get-client-invoices
 import ErrorBadge from '../components/ErrorBadge';
 import BackButton from '../components/BackButton';
 import Pagination from '../components/Pagination';
+import SuccessBadge from '../components/SuccessBadge';
 
 const ViewClient: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -104,7 +105,7 @@ const ViewClient: React.FC = () => {
         </div>
 
         <div className="border p-3 bg-white rounded">
-          {successMessage && <ErrorBadge message={successMessage} />}
+          {successMessage && <SuccessBadge message={successMessage} />}
 
           {loadingInvoices && <p>Carregando faturas...</p>}
           {errorInvoices && <ErrorBadge message="Erro ao carregar faturas." />}
