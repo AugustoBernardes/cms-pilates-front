@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BackButton from '../components/BackButton';
 import { listClients, type Client } from '../services/list-clients';
+import SearchInput from '../components/SearchInput';
 
 const Clients: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -24,7 +25,7 @@ const Clients: React.FC = () => {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  // Busca dados toda vez que debouncedSearchTerm ou page mudar
+  // Search data every time the debounced search term or page changes
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -56,16 +57,14 @@ const Clients: React.FC = () => {
         <BackButton />
       </div>
 
+
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <div className="mb-3">
-          <input
-            type="search"
-            className="form-control"
-            placeholder="Buscar clientes..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <SearchInput
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Buscar clientes..."
+          className="mb-3"
+        />
 
         <div className="mb-3">
           <button className="btn btn-primary">Adicionar Novo Cliente</button>
@@ -84,7 +83,7 @@ const Clients: React.FC = () => {
                   </button>
                 </li>
 
-                {/* Paginação dinâmica */}
+                {/* Pagination */}
                 {(() => {
                   const pages = [];
                   const startPage = Math.max(1, page - 3);
