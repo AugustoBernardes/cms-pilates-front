@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { loginService } from "../services/login-service";
 import ErrorBadge from "../components/ErrorBadge";
+import { useNavigate } from "react-router-dom";
+
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +22,9 @@ const Login: React.FC = () => {
 
     try {
       const data = await loginService(username, password);
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.data?.token || "");
+      navigate("/home", { replace: true });
+
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       setError("Usuário ou senha inválidos ou erro de rede.");
