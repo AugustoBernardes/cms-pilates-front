@@ -3,6 +3,7 @@ import BackButton from '../components/BackButton';
 import { listClients, type Client } from '../services/list-clients';
 import SearchInput from '../components/SearchInput';
 import Pagination from '../components/Pagination';
+import ClientCard from '../components/ClientCard';
 
 const Clients: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -82,36 +83,20 @@ const Clients: React.FC = () => {
 
 
           <div style={{ marginTop: '2rem' }}>
-            {loading && <p>Carregando clientes...</p>}
-            {error && <p className="text-danger">{error}</p>}
-            {!loading && !error && clients.length === 0 && <p>Nenhum cliente encontrado.</p>}
-
             {!loading && !error && clients.length > 0 && (
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Telefone</th>
-                    <th>CPF</th>
-                    <th>Data de Nascimento</th>
-                    <th>Valor da Fatura Atual</th>
-                    <th>Criado em</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {clients.map((client) => (
-                    <tr key={client.id}>
-                      <td>{client.name}</td>
-                      <td>{client.phone}</td>
-                      <td>{client.cpf}</td>
-                      <td>{new Date(client.birth_date).toLocaleDateString()}</td>
-                      <td>R$ {client.current_invoice_price.toFixed(2)}</td>
-                      <td>{new Date(client.created_at).toLocaleDateString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div>
+                {clients.map((client) => (
+                  <ClientCard
+                    key={client.id}
+                    client={client}
+                    onView={(id) => console.log('Visualizar', id)}
+                    onEdit={(id) => console.log('Atualizar', id)}
+                    onDelete={(id) => console.log('Deletar', id)}
+                  />
+                ))}
+              </div>
             )}
+
           </div>
         </div>
       </div>
