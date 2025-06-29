@@ -8,7 +8,13 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    console.error("API Error:", error);
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      console.warn("Sessão expirada ou token inválido. Redirecionando para login.");
+
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    }
+
     return Promise.reject(error);
   }
 );
