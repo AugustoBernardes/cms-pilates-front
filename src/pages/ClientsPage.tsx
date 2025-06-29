@@ -64,16 +64,16 @@ const Clients: React.FC = () => {
           <button className="btn btn-primary">Adicionar Novo Cliente</button>
         </div>
 
-        <div className="position-relative border p-3 bg-white rounded">
-          <div className="position-absolute top-0 end-0 m-2">
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={(newPage) => setPage(newPage)}
-            />
-          </div>
+        <div className="d-flex justify-content-end mb-3">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        </div>
 
-          <div style={{ marginTop: '2rem' }}>
+        <div className="border p-3 bg-white rounded">
+          <div style={{ marginTop: '1rem' }}>
             {isLoading && <p>Carregando clientes...</p>}
 
             {!isLoading && clients.length === 0 && (
@@ -98,6 +98,5 @@ const Clients: React.FC = () => {
     </div>
   );
 };
-
 
 export default Clients;
