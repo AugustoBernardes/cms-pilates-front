@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/HomePage';
+import Clients from './pages/ClientsPage';
 
 const App: React.FC = () => {
 
@@ -18,6 +19,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute>
+              <Clients />
             </ProtectedRoute>
           }
         />
