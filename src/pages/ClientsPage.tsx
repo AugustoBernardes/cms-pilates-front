@@ -76,7 +76,7 @@ const Clients: React.FC = () => {
           value={searchTerm}
           onChange={(value) => {
             setSearchTerm(value);
-            setPage(1); // Resetar página ao buscar
+            setPage(1);
           }}
           placeholder="Buscar clientes..."
           className="mb-3"

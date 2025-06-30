@@ -2,16 +2,8 @@ import React from 'react';
 import Pagination from './Pagination';
 import SuccessBadge from './SuccessBadge';
 import ErrorBadge from './ErrorBadge';
-import type { Client } from '../services/interfaces';
+import type { Invoice } from '../services/get-client-invoices';
 
-export type Invoice = {
-  id: string;
-  status: string;
-  value: number;
-  month: {
-    month: string;
-  };
-};
 
 
 type Props = {
@@ -24,7 +16,6 @@ type Props = {
   isError: boolean;
   successMessage: string | null;
   isMutationPending: boolean;
-  client?: Client;
 };
 
 const ClientInvoices: React.FC<Props> = ({
@@ -37,15 +28,11 @@ const ClientInvoices: React.FC<Props> = ({
   isError,
   successMessage,
   isMutationPending,
-  client,
 }) => {
+
+  
   return (
     <div className="border p-3 bg-white rounded">
-      {client && (
-        <div className="mb-3">
-          <h5>Faturas de: {client.name}</h5>
-        </div>
-      )}
 
       {successMessage && <SuccessBadge message={successMessage} />}
       {isLoading && <p>Carregando faturas...</p>}

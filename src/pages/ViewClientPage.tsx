@@ -46,6 +46,7 @@ const ViewClient: React.FC = () => {
     onSuccess: () => {
       setSuccessMessage('Status da fatura atualizado com sucesso!');
       if (id) queryClient.invalidateQueries({ queryKey: ['client-invoices', id] });
+      queryClient.invalidateQueries({ queryKey: ['invoices-by-month'], refetchType: 'none' });
       setTimeout(() => setSuccessMessage(null), 3000);
     },
     onError: () => {
@@ -87,7 +88,7 @@ const ViewClient: React.FC = () => {
           totalPages={totalPages}
           currentPage={invoicePage}
           onPageChange={setInvoicePage}
-          onToggleStatus={(invoice_id, currentStatus) =>
+          onToggleStatus={(invoice_id, currentStatus,) =>
             mutation.mutate({ invoice_id, currentStatus })
           }
           isLoading={loadingInvoices}

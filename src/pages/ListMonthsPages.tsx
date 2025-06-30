@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import BackButton from '../components/BackButton';
 import ErrorBadge from '../components/ErrorBadge';
 import { getMonths } from '../services/fetch-months';
+import { useNavigate } from 'react-router-dom';
 
 const MonthsListPage: React.FC = () => {
   const { data, isLoading, isError } = useQuery({
@@ -10,6 +11,7 @@ const MonthsListPage: React.FC = () => {
     queryFn: getMonths,
     staleTime: 1000 * 60 * 5,
   });
+  const navigate = useNavigate();
 
   const hasMonths = data && data.data && data.data.length > 0;
 
@@ -53,7 +55,7 @@ const MonthsListPage: React.FC = () => {
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLButtonElement).classList.remove('shadow');
               }}
-              onClick={() => console.log('Clicou no mês:', month.id)}
+              onClick={() => navigate(`/months/${month.id}?month=${month.month}`)}
             >
               <strong>
                 {new Date(month.month + '-01').toLocaleString('pt-BR', {

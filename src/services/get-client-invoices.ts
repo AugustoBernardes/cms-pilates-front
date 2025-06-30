@@ -13,6 +13,7 @@ export interface Invoice {
   client?: Client
 }
 
+
 export interface ListClientInvoicesResponse {
   total: number;
   total_pages: number;
