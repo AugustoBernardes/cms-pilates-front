@@ -47,15 +47,14 @@ const MonthInvoicesList: React.FC<Props> = ({
                 style={{ backgroundColor: '#f9f9f9' }}
               >
                 <div>
-                  <p
-                    className="mb-1 fw-bold"
-                    style={{ fontSize: '1.1rem', textTransform: 'capitalize' }}
-                  >
-                    {new Date(invoice.month.month).toLocaleString('pt-BR', {
-                      month: 'long',
-                      year: 'numeric',
-                    })}
+                  <p className="mb-1 fw-bold" style={{ fontSize: '1.1rem' }}>
+                    Cliente: {invoice.client?.name}
                   </p>
+
+                  <p className="mb-1 text-muted" style={{ fontSize: '0.95rem' }}>
+                    Telefone: {invoice.client?.phone}
+                  </p>
+
                   <span
                     className={`badge ${
                       invoice.status === 'paid' ? 'bg-success' : 'bg-warning text-dark'
@@ -64,11 +63,9 @@ const MonthInvoicesList: React.FC<Props> = ({
                   >
                     {invoice.status === 'paid' ? 'Pago' : 'Aberto'}
                   </span>
-                  <p className="mt-1 mb-0" style={{ fontWeight: 600 }}>
+
+                  <p className="mt-1 mb-0 fw-bold">
                     Valor: R$ {invoice.value.toFixed(2)}
-                  </p>
-                  <p className="mt-1 mb-0" style={{ fontWeight: 600 }}>
-                    Client {invoice.client?.name}
                   </p>
                 </div>
 
