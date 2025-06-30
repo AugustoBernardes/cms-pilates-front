@@ -1,9 +1,9 @@
 import api from "./api";
 import type { BaseResponse, Client } from "./interfaces";
 
-export async function createClient(id:string, data: Partial<Client>) {
+export async function createClient(data: Partial<Client>) {
 
-const response = await api.post<BaseResponse<Client>>(`/clients/${id}`, 
+const response = await api.post<BaseResponse<Client>>(`/clients`, 
     data,
     {
       headers: {

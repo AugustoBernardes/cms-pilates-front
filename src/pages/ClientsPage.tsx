@@ -8,7 +8,7 @@ import ErrorBadge from '../components/ErrorBadge';
 import { listClients } from '../services/list-clients';
 import { useDebounce } from '../hooks/Debounce';
 import type { Client } from '../services/interfaces';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SuccessBadge from '../components/SuccessBadge';
 
 const pageSize = 2;
@@ -18,9 +18,12 @@ const Clients: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+  const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const updateSuccess = params.get('updated') === 'true';
+  const createdSuccess = params.get('created') === 'true';
+
 
   useEffect(() => {
   if (updateSuccess) {
@@ -60,6 +63,8 @@ const Clients: React.FC = () => {
     >
 
       {updateSuccess && <SuccessBadge message={'Dados do cliente Atualizados!'} />}
+      {createdSuccess && <SuccessBadge message={'Cliente criado com sucesso!'} />}
+
       <div className="mb-3">
         <BackButton />
       </div>
@@ -78,7 +83,7 @@ const Clients: React.FC = () => {
         />
 
         <div className="mb-3">
-          <button className="btn btn-primary">Adicionar Novo Cliente</button>
+          <button onClick={() => navigate(`/clients/create`) } className="btn btn-primary">Adicionar Novo Cliente</button>
         </div>
 
         <div className="d-flex justify-content-end mb-3">

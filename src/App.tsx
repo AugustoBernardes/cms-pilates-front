@@ -6,6 +6,7 @@ import Home from './pages/HomePage';
 import Clients from './pages/ClientsPage';
 import ViewClient from './pages/ViewClientPage';
 import EditClientPage from './pages/EditClientPage';
+import AddClientPage from './pages/AddClientPage';
 
 const App: React.FC = () => {
 
@@ -32,8 +33,21 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/clients/:id/edit" element={<EditClientPage />} />
-        <Route path="/clients/:id" element={<ViewClient />} />
+        <Route path="/clients/:id/edit" element={
+           <ProtectedRoute> 
+            <EditClientPage />
+           </ProtectedRoute>
+         } />
+        <Route path="/clients/:id" element={
+          <ProtectedRoute>
+            <ViewClient />
+          </ProtectedRoute>
+        } />
+        <Route path="/clients/create" element={
+          <ProtectedRoute>
+            <AddClientPage />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );
