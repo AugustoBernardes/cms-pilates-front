@@ -7,6 +7,7 @@ import Clients from './pages/ClientsPage';
 import ViewClient from './pages/ViewClientPage';
 import EditClientPage from './pages/EditClientPage';
 import AddClientPage from './pages/AddClientPage';
+import MonthsListPage from './pages/ListMonthsPages';
 
 const App: React.FC = () => {
 
@@ -48,9 +49,13 @@ const App: React.FC = () => {
             <AddClientPage />
           </ProtectedRoute>
         } />
+        <Route path="/months" element={
+          <ProtectedRoute>
+            <MonthsListPage />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );
 };
-
 export default App;

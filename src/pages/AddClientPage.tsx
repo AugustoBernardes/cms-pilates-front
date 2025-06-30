@@ -15,7 +15,7 @@ const AddClientPage: React.FC = () => {
     mutationFn: (newData: Partial<Client>) => createClient(newData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] });
-      navigate('/clients?created=true');
+      navigate('/clients?created=true', { replace: true });
     },
   });
 

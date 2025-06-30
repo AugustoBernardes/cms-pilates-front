@@ -25,7 +25,7 @@ const Home: React.FC = () => {
           </button>
 
           <button
-            onClick={() => handleButtonClick('/payments')}
+            onClick={() => handleButtonClick('/months')}
             className="btn btn-secondary btn-lg w-100"
           >
             Histórico de Pagamento

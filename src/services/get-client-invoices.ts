@@ -1,10 +1,7 @@
 import api from "./api";
+import type { Month } from "./fetch-months";
 import type { BaseResponse } from "./interfaces";
 
-export interface Month {
-  id: string;
-  month: string;
-}
 export interface Invoice {
   id: string;
   status: string;
