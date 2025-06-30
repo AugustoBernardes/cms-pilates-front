@@ -34,3 +34,10 @@ export interface ListClientResponse {
   page_size: number;
   data: Client[];
 }
+
+
+export interface ListMonthInvoices {
+  id: string;
+  page?: number;
+  page_size?: number;
+}
