@@ -20,7 +20,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, enabledEdtion ,onDelete
           <p className="mb-1"><strong>Telefone:</strong> {client.phone}</p>
           <p className="mb-1"><strong>CPF:</strong> {client.cpf}</p>
           <p className="mb-1"><strong>Nascimento:</strong> {new Date(client.birth_date).toLocaleDateString('pt-BR')}</p>
-          <p className="mb-1"><strong>Mensalidade Atual:</strong> R$ {client.current_invoice_price.toFixed(2)}</p>
+          {enabledEdtion && (<p className="mb-1"><strong>Mensalidade Atual:</strong> R$ {client.current_invoice_price.toFixed(2)}</p>)}
         </div>
 
         <div className="d-flex flex-column gap-2">
