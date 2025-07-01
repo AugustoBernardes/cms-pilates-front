@@ -13,7 +13,7 @@ type Props = {
   isError: boolean;
 };
 
-const MonthInvoicesList: React.FC<Props> = ({
+const GenericInvoiceList: React.FC<Props> = ({
   invoices,
   totalPages,
   currentPage,
@@ -84,4 +84,4 @@ const MonthInvoicesList: React.FC<Props> = ({
   );
 };
 
-export default MonthInvoicesList;
+export default GenericInvoiceList;

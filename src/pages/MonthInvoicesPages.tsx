@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import BackButton from '../components/BackButton';
 import ErrorBadge from '../components/ErrorBadge';
-import MonthInvoicesList from '../components/MonthInvoicesList';
+import GenericInvoiceList from '../components/GenericInvoicesList';
 import { listMonthInvoices } from '../services/list-month-invoices';
 import { getMonthResume } from '../services/get-month-resume';
 import type { Invoice } from '../services/get-client-invoices';
@@ -112,7 +112,7 @@ const MonthInvoicesPage: React.FC = () => {
         )}
 
         <div className="d-flex flex-column gap-3">
-          <MonthInvoicesList
+          <GenericInvoiceList
             invoices={invoices}
             totalPages={totalPages}
             currentPage={page}
