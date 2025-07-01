@@ -22,7 +22,7 @@ const ClientForm: React.FC<ClientFormProps> = ({
     phone: '',
     cpf: '',
     birth_date: '',
-    current_invoice_price: 0,
+    current_invoice_price: undefined,
   });
 
   useEffect(() => {
@@ -32,18 +32,25 @@ const ClientForm: React.FC<ClientFormProps> = ({
         phone: initialData.phone || '',
         cpf: initialData.cpf || '',
         birth_date: initialData.birth_date || '',
-        current_invoice_price: initialData.current_invoice_price || 0,
+        current_invoice_price: initialData.current_invoice_price,
       });
     }
   }, [initialData]);
 
-  const handleChange = (field: keyof typeof form, value: string | number) => {
+  const handleChange = (field: keyof typeof form, value: string | number | undefined) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(form);
+
+    const dataToSend = { ...form };
+
+    if (!dataToSend.cpf || dataToSend.cpf.trim() === '') {
+      delete dataToSend.cpf;
+    }
+
+    onSubmit(dataToSend);
   };
 
   return (
@@ -68,6 +75,7 @@ const ClientForm: React.FC<ClientFormProps> = ({
             value={form.name}
             onChange={(e) => handleChange('name', e.target.value)}
             required
+            title="Por favor, preencha o nome"
           />
         </div>
 
@@ -79,6 +87,7 @@ const ClientForm: React.FC<ClientFormProps> = ({
             value={form.phone}
             onChange={(e) => handleChange('phone', e.target.value)}
             required
+            title="Por favor, preencha o telefone"
           />
         </div>
 
@@ -89,7 +98,6 @@ const ClientForm: React.FC<ClientFormProps> = ({
             className="form-control"
             value={form.cpf}
             onChange={(e) => handleChange('cpf', e.target.value)}
-            required
           />
         </div>
 
@@ -101,6 +109,7 @@ const ClientForm: React.FC<ClientFormProps> = ({
             value={form.birth_date ? form.birth_date.split('T')[0] : ''}
             onChange={(e) => handleChange('birth_date', e.target.value)}
             required
+            title="Por favor, preencha a data de nascimento"
           />
         </div>
 
@@ -109,13 +118,18 @@ const ClientForm: React.FC<ClientFormProps> = ({
           <input
             type="number"
             className="form-control"
-            value={form.current_invoice_price}
+            value={form.current_invoice_price !== undefined ? form.current_invoice_price : ''}
+            placeholder="Ex: 150.00"
             onChange={(e) =>
-              handleChange('current_invoice_price', parseFloat(e.target.value))
+              handleChange(
+                'current_invoice_price',
+                e.target.value ? parseFloat(e.target.value) : undefined
+              )
             }
             required
             min="0"
             step="0.01"
+            title="Por favor, informe o valor da mensalidade"
           />
         </div>
 
