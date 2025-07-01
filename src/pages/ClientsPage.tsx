@@ -28,11 +28,11 @@ const Clients: React.FC = () => {
   const createdSuccess = params.get('created') === 'true';
 
   useEffect(() => {
-    if (updateSuccess) {
+    if (updateSuccess || createdSuccess) {
       const cleanUrl = location.pathname;
       window.history.replaceState({}, '', cleanUrl);
     }
-  }, [updateSuccess, location.pathname]);
+  }, [updateSuccess, createdSuccess, location.pathname]);
 
   const {
     data,
