@@ -108,6 +108,7 @@ const Clients: React.FC = () => {
                   <ClientCard
                     key={client.id}
                     client={client}
+                    enabledEdtion={true}
                     onDelete={(id) => console.log('Deletar', id)}
                   />
                 ))}

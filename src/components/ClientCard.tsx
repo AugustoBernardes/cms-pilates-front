@@ -6,9 +6,10 @@ import type { Client } from '../services/interfaces';
 interface ClientCardProps {
   client: Client;
   onDelete: (id: string) => void;
+  enabledEdtion?: boolean;
 }
 
-const ClientCard: React.FC<ClientCardProps> = ({ client, onDelete }) => {
+const ClientCard: React.FC<ClientCardProps> = ({ client, enabledEdtion ,onDelete }) => {
   const navigate = useNavigate();
 
   return (
@@ -29,19 +30,23 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, onDelete }) => {
           >
             Visualizar
           </button>
+
+          {enabledEdtion && (
           <button
             className="btn btn-outline-success btn-sm"
             onClick={() => navigate(`/clients/${client.id}/edit`)  
            }
           >
             Atualizar
-          </button>
+          </button>)}
+
+          {enabledEdtion && (
           <button
             className="btn btn-outline-danger btn-sm"
             onClick={() => onDelete(client.id)}
           >
             Deletar
-          </button>
+          </button>)}
         </div>
       </div>
     </div>

@@ -32,7 +32,7 @@ const Home: React.FC = () => {
           </button>
 
           <button
-            onClick={() => handleButtonClick('/birthdays')}
+            onClick={() => handleButtonClick('/monthly-birthdays')}
             className="btn btn-success btn-lg w-100"
           >
             Aniversários
