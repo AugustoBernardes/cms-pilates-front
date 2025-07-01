@@ -23,6 +23,7 @@ const EditClientPage: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['client', id], refetchType: 'none' });
       queryClient.invalidateQueries({ queryKey: ['clients'] });
+      queryClient.invalidateQueries({ queryKey: ['birthday-clients'] });
       navigate('/clients?updated=true', { replace: true });
     },
   });
