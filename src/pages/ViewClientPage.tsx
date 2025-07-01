@@ -47,6 +47,7 @@ const ViewClient: React.FC = () => {
       setSuccessMessage('Status da fatura atualizado com sucesso!');
       if (id) queryClient.invalidateQueries({ queryKey: ['client-invoices', id] });
       queryClient.invalidateQueries({ queryKey: ['invoices-by-month'], refetchType: 'none' });
+      queryClient.invalidateQueries({ queryKey: ['month-resume'], refetchType: 'none' });
       setTimeout(() => setSuccessMessage(null), 3000);
     },
     onError: () => {

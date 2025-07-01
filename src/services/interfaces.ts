@@ -41,3 +41,10 @@ export interface ListMonthInvoices {
   page?: number;
   page_size?: number;
 }
+
+
+export interface MonthResume {
+  total: number;
+  total_paid: number;
+  total_open: number;
+}
