@@ -9,6 +9,7 @@ import EditClientPage from './pages/EditClientPage';
 import AddClientPage from './pages/AddClientPage';
 import MonthsListPage from './pages/ListMonthsPages';
 import MonthInvoicesPage from './pages/MonthInvoicesPages';
+import PendingInvoicesPage from './pages/PendingInvoicesPage';
 
 const App: React.FC = () => {
 
@@ -58,6 +59,11 @@ const App: React.FC = () => {
         <Route path="/months/:monthId" element={ 
         <ProtectedRoute>
           <MonthInvoicesPage />
+        </ProtectedRoute> 
+        } />
+        <Route path="/pending-invoices" element={ 
+        <ProtectedRoute>
+          <PendingInvoicesPage />
         </ProtectedRoute> 
         } />
       </Routes>

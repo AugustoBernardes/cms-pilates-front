@@ -48,6 +48,7 @@ const ViewClient: React.FC = () => {
       if (id) queryClient.invalidateQueries({ queryKey: ['client-invoices', id] });
       queryClient.invalidateQueries({ queryKey: ['invoices-by-month'], refetchType: 'none' });
       queryClient.invalidateQueries({ queryKey: ['month-resume'], refetchType: 'none' });
+      queryClient.invalidateQueries({ queryKey: ['pending-invoices'], refetchType: 'none' });
       setTimeout(() => setSuccessMessage(null), 3000);
     },
     onError: () => {
