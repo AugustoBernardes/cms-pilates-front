@@ -3,6 +3,7 @@ import Pagination from './Pagination';
 import SuccessBadge from './SuccessBadge';
 import ErrorBadge from './ErrorBadge';
 import type { Invoice } from '../services/get-client-invoices';
+import { monthFormatter } from '../utils/month-formatter';
 
 
 
@@ -52,6 +53,7 @@ const ClientInvoices: React.FC<Props> = ({
           <div className="d-flex flex-column gap-3 mb-3">
             {invoices.map((invoice) => {
               const isPaid = invoice.status === 'paid';
+              console.log({invoice, month: new Date(invoice.month.month)});
 
               return (
                 <div
@@ -64,10 +66,7 @@ const ClientInvoices: React.FC<Props> = ({
                       className="mb-1 fw-bold"
                       style={{ fontSize: '1.1rem', textTransform: 'capitalize' }}
                     >
-                      {new Date(invoice.month.month).toLocaleString('pt-BR', {
-                        month: 'long',
-                        year: 'numeric',
-                      })}
+                      {monthFormatter(invoice.month.month)}
                     </p>
                     <span
                       className={`badge ${isPaid ? 'bg-success' : 'bg-warning text-dark'}`}

@@ -4,6 +4,7 @@ import BackButton from '../components/BackButton';
 import ErrorBadge from '../components/ErrorBadge';
 import { getMonths } from '../services/fetch-months';
 import { useNavigate } from 'react-router-dom';
+import { monthFormatter } from '../utils/month-formatter';
 
 const MonthsListPage: React.FC = () => {
   const { data, isLoading, isError } = useQuery({
@@ -58,10 +59,7 @@ const MonthsListPage: React.FC = () => {
               onClick={() => navigate(`/months/${month.id}?month=${month.month}`)}
             >
               <strong>
-                {new Date(month.month + '-01').toLocaleString('pt-BR', {
-                  month: 'long',
-                  year: 'numeric',
-                })}
+                {monthFormatter(month.month)}
               </strong>
             </button>
           ))}

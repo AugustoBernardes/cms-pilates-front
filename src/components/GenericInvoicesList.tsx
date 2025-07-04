@@ -3,6 +3,7 @@ import Pagination from './Pagination';
 import ErrorBadge from './ErrorBadge';
 import { useNavigate } from 'react-router-dom';
 import type { Invoice } from '../services/get-client-invoices';
+import { monthFormatter } from '../utils/month-formatter';
 
 type Props = {
   invoices: Invoice[];
@@ -53,6 +54,10 @@ const GenericInvoiceList: React.FC<Props> = ({
 
                   <p className="mb-1 text-muted" style={{ fontSize: '0.95rem' }}>
                     Telefone: {invoice.client?.phone}
+                  </p>
+
+                  <p className="mb-1 text-muted" style={{ fontSize: '0.95rem' }}>
+                    Mês: {monthFormatter(invoice.month.month)}
                   </p>
 
                   <span
