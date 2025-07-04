@@ -9,7 +9,7 @@ import type { Invoice } from '../services/get-client-invoices';
 import GenericInvoiceList from '../components/GenericInvoicesList';
 import { listPendingInvoices } from '../services/list-pending-invoices';
 
-const pageSize = 2;
+const pageSize = 10;
 
 const PendingInvoicesPage: React.FC = () => {
   const [page, setPage] = useState(1);

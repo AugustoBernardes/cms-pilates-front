@@ -8,7 +8,7 @@ import { listMonthInvoices } from '../services/list-month-invoices';
 import { getMonthResume } from '../services/get-month-resume';
 import type { Invoice } from '../services/get-client-invoices';
 
-const pageSize = 2;
+const pageSize = 10;
 
 const MonthInvoicesPage: React.FC = () => {
   const { monthId } = useParams<{ monthId: string }>();

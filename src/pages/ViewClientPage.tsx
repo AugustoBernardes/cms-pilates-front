@@ -18,7 +18,7 @@ const ViewClient: React.FC = () => {
   }, [id, navigate]);
 
   const [invoicePage, setInvoicePage] = useState(1);
-  const invoicePageSize = 2;
+  const invoicePageSize = 10;
 
   const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);

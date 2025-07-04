@@ -12,7 +12,7 @@ import type { Client } from '../services/interfaces';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteClient } from '../services/delete.client';
 
-const pageSize = 2;
+const pageSize = 10;
 
 const Clients: React.FC = () => {
   const [page, setPage] = useState(1);
