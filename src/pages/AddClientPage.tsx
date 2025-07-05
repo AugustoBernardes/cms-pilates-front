@@ -14,6 +14,7 @@ const AddClientPage: React.FC = () => {
     mutationFn: (newData: Partial<Client>) => createClient(newData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] });
+      queryClient.invalidateQueries({ queryKey: ['pending-invoices'] });
       navigate('/clients?created=true', { replace: true });
     },
   });
