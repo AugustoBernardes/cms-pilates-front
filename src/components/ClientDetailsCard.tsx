@@ -1,4 +1,5 @@
 import React from 'react';
+import { dateFormatter } from '../utils/date-formatter';
 
 type Client = {
   name: string;
@@ -22,7 +23,7 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
         <div style={{ minWidth: 250, marginBottom: 12 }}>
           <p><strong>Telefone:</strong> {client.phone}</p>
           <p><strong>CPF:</strong> {client.cpf}</p>
-          <p><strong>Data de Nascimento:</strong> {new Date(client.birth_date).toLocaleDateString('pt-BR')}</p>
+          <p><strong>Data de Nascimento:</strong> {dateFormatter(client.birth_date)}</p>
         </div>
         <div style={{ minWidth: 250, marginBottom: 12 }}>
           <p><strong>Valor da Mensalidade Atual:</strong> R$ {client.current_invoice_price.toFixed(2)}</p>

@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Client } from '../services/interfaces';
+import { dateFormatter } from '../utils/date-formatter';
 
 interface ClientCardProps {
   client: Client;
@@ -19,7 +20,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, enabledEdtion ,onDelete
           <h5 className="card-title mb-2">{client.name}</h5>
           <p className="mb-1"><strong>Telefone:</strong> {client.phone}</p>
           <p className="mb-1"><strong>CPF:</strong> {client.cpf}</p>
-          <p className="mb-1"><strong>Nascimento:</strong> {new Date(client.birth_date).toLocaleDateString('pt-BR')}</p>
+          <p className="mb-1"><strong>Nascimento:</strong> {dateFormatter(client.birth_date)}</p>
           {enabledEdtion && (<p className="mb-1"><strong>Mensalidade Atual:</strong> R$ {client.current_invoice_price.toFixed(2)}</p>)}
         </div>
 
