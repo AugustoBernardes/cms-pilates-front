@@ -101,7 +101,7 @@ const Clients: React.FC = () => {
         />
 
         <div className="mb-3">
-          <button onClick={() => navigate(`/clients/create`)} className="btn btn-primary">
+          <button onClick={() => navigate(`/clients/create`, {replace: true})} className="btn btn-primary">
             Adicionar Novo Cliente
           </button>
         </div>
